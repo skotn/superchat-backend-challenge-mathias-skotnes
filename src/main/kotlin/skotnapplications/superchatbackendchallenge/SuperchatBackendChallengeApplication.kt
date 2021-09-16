@@ -13,3 +13,11 @@ class SuperchatBackendChallengeApplication
 fun main(args: Array<String>) {
 	runApplication<SuperchatBackendChallengeApplication>(*args)
 }
+
+@Configuration
+class Beans {
+	@Bean
+	fun restTemplate(): RestTemplate {
+		return RestTemplate()
+	}
+}

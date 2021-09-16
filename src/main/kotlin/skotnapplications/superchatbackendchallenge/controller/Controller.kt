@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*
 import skotnapplications.superchatbackendchallenge.model.*
 import skotnapplications.superchatbackendchallenge.repository.ContactRepository
 import skotnapplications.superchatbackendchallenge.repository.MessageRepository
+import skotnapplications.superchatbackendchallenge.utils.MessageFormatter
 
 @RestController
 class Controller {
@@ -17,6 +18,9 @@ class Controller {
 	@Autowired
 	lateinit var contactRepository: ContactRepository
 
+	@Autowired
+	lateinit var messageFormatter: MessageFormatter
+
 	@GetMapping("/contacts")
 	fun getAllContacts(): ResponseEntity<List<Contact>> {
 		val contacts = contactRepository.findAll()
@@ -25,7 +29,8 @@ class Controller {
 
 	@PostMapping("/messages")
 	fun postMessage(@RequestBody message: Message): ResponseEntity<Message> {
-		val createdMessage = messageRepository.save(Message(message.sender, message.receiver, message.content))
+		val messageText = messageFormatter.formatMessage(message)
+		val createdMessage = messageRepository.save(Message(message.sender, message.receiver, messageText))
 		return ResponseEntity(createdMessage, HttpStatus.CREATED)
 	}
 
