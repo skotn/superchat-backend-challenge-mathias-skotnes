@@ -6,4 +6,7 @@ import skotnapplications.superchatbackendchallenge.model.Message
 
 interface ContactRepository : JpaRepository<Contact, Long>
 
-interface MessageRepository : JpaRepository<Message, Long>
+interface MessageRepository : JpaRepository<Message, Long> {
+    fun findBySender(sender: Long): List<Message>
+    fun findByReceiver(receiver: Long): List<Message>
+}

@@ -27,6 +27,21 @@ class Controller {
 		return ResponseEntity(contacts, HttpStatus.OK)
 	}
 
+	@GetMapping("/convos/{userId}")
+	fun getConvos(@PathVariable("userId") id: Long): ResponseEntity<List<Conversation>> {
+		val messagesSent = messageRepository.findBySender(id).groupBy { it.receiver }.toMutableMap()
+		val messagesRecieved = messageRepository.findByReceiver(id).groupBy { it.sender  }
+
+		messagesRecieved.forEach {
+			if (messagesSent.containsKey(it.key))  {
+				messagesSent[it.key] = messagesSent[it.key]!!.plus(it.value)
+			}
+			else messagesSent.plus(it.key to it.value)
+		}
+
+		return ResponseEntity(messagesSent.map { Conversation(it.key, it.value) }, HttpStatus.OK)
+	}
+
 	@PostMapping("/messages")
 	fun postMessage(@RequestBody message: Message): ResponseEntity<Message> {
 		val messageText = messageFormatter.formatMessage(message)
