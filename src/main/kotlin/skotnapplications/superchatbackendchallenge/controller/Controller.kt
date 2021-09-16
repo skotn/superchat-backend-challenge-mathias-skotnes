@@ -11,6 +11,13 @@ import skotnapplications.superchatbackendchallenge.utils.MessageFormatter
 
 @RestController
 class Controller {
+	/*
+	TODO
+		* Add more validations
+		* Add logging
+		* Add more error handling
+		* Add more tests
+	*/
 
 	@Autowired
 	lateinit var messageRepository: MessageRepository
